@@ -1,0 +1,70 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  CreateRelease:
+    runs-on: windows-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
+          body: |
+            Auto-generated release from GitHub Actions.
+
+jobs:
+  Build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        GOOS: [windows]
+        arch: [x64, x86]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          architecture: ${{ matrix.arch }}
+          cache: 'pip'
+          cache-dependency-path: |
+              **/requirements*.txt
+
+      - name: Install requirements
+        run: |
+          pip install -r ./requirements.txt -r ./singbox_subscribe/requirements.txt
+
+      - run: pyinstaller --noconfirm --onefile --console -i "NONE" -p ./singbox_subscribe ./subconverter.py
+      
+      - name: Set Environment Variables
+        id: set_vars
+        shell: pwsh
+        run: |
+          if ("${{ matrix.arch }}" -eq "x64") {
+            echo "target_arch=amd64" | Out-File -FilePath $env:GITHUB_ENV -Append
+          } else {
+            echo "target_arch=386" | Out-File -FilePath $env:GITHUB_ENV -Append
+          }
+
+      - name: Upload ${{ matrix.GOOS }}-${{ env.target_arch }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ env.target_arch }}.exe
+        with:
+          upload_url: ${{ needs.CreateRelease.outputs.upload_url }}
+          asset_path: ./dist/subconverter.exe
+          asset_name: ${{ env.FILE_NAME }}
+          asset_content_type: application/x-msdownload
