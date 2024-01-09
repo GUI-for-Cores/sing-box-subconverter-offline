@@ -36,7 +36,7 @@ jobs:
         run: |
           pip install -r ./requirements.txt -r ./singbox_subscribe/requirements.txt
 
-      - run: pyinstaller --noconfirm --onefile --console -i "NONE" -p ./singbox_subscribe ./subconverter.py
+      - run: pyinstaller --noconfirm --onefile --console -i "NONE" -p ./singbox_subscribe ./sing-box-subconverter.py
       
       - name: Set Environment Variables
         id: set_vars
@@ -50,7 +50,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         env:
-          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ env.target_arch }}.exe
+          FILE_NAME: sing-box-subconverter-${{ matrix.GOOS }}-${{ env.target_arch }}.exe
         with:
           name: ${{ env.FILE_NAME }}
-          path: ./dist/subconverter.exe
+          path: ./dist/sing-box-subconverter.exe

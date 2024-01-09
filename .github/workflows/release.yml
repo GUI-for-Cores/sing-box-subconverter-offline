@@ -47,7 +47,7 @@ jobs:
         run: |
           pip install -r ./requirements.txt -r ./singbox_subscribe/requirements.txt
 
-      - run: pyinstaller --noconfirm --onefile --console -i "NONE" -p ./singbox_subscribe ./subconverter.py
+      - run: pyinstaller --noconfirm --onefile --console -i "NONE" -p ./singbox_subscribe ./sing-box-subconverter.py
       
       - name: Set Environment Variables
         id: set_vars
@@ -63,9 +63,9 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ env.target_arch }}.exe
+          FILE_NAME: sing-box-subconverter-${{ matrix.GOOS }}-${{ env.target_arch }}.exe
         with:
           upload_url: ${{ needs.CreateRelease.outputs.upload_url }}
-          asset_path: ./dist/subconverter.exe
+          asset_path: ./dist/sing-box-subconverter.exe
           asset_name: ${{ env.FILE_NAME }}
           asset_content_type: application/x-msdownload
