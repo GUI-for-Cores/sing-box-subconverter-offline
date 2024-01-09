@@ -50,7 +50,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         env:
-          FILE_NAME: subconverter-${{ matrix.GOOS }}-$env:target_arch.exe
+          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ env.target_arch }}.exe
         with:
           name: ${{ env.FILE_NAME }}
           path: ./dist/subconverter.exe
