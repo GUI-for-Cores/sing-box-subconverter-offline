@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         GOOS: [windows]
-        arch: [x64, x86, 386]
+        arch: [x64, x86]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
