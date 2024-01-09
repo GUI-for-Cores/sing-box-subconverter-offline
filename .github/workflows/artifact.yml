@@ -13,11 +13,10 @@ on:
 jobs:
   Build:
     runs-on: windows-latest
-    permissions: write-all
     strategy:
       matrix:
         GOOS: [windows]
-        GOARCH: [amd64, arm64, 386]
+        arch: [x64, x86, 386]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,6 +27,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+          architecture: ${{ matrix.arch }}
           cache: 'pip'
           cache-dependency-path: |
               **/requirements*.txt
@@ -36,11 +36,21 @@ jobs:
         run: |
           pip install -r ./requirements.txt -r ./singbox_subscribe/requirements.txt
 
-      - run: pyinstaller --noconfirm --onefile --console -i "NONE" "./subconverter.py"
+      - run: pyinstaller --noconfirm --onefile --console -i "NONE" -p ./singbox_subscribe ./subconverter.py
+      
+      - name: Set Environment Variables
+        id: set_vars
+        shell: pwsh
+        run: |
+          if ("${{ matrix.arch }}" -eq "x64") {
+            echo "::set-output name=arch::amd64"
+          } else {
+            echo "::set-output name=arch::386"
+          }
 
       - uses: actions/upload-artifact@v3
         env:
-          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ matrix.GOARCH }}.exe
+          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ steps.set_vars.outputs.arch }}.exe
         with:
           name: ${{ env.FILE_NAME }}
           path: ./dist/subconverter.exe
