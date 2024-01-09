@@ -1,0 +1,3 @@
+[submodule "singbox_subscribe"]
+	path = singbox_subscribe
+	url = https://github.com/Toperlock/sing-box-subscribe

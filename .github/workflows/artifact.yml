@@ -1,0 +1,46 @@
+on:
+  # Allow running the workflow manually
+  workflow_dispatch:
+  # Run the workflow when a push is made
+  push:
+    branches:
+      - main
+  # Run the workflow when a pull request is made
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    strategy:
+      matrix:
+        GOOS: [windows]
+        GOARCH: [amd64, arm64, 386]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: |
+              **/requirements*.txt
+
+      - name: Install requirements
+        run: |
+          pip install -r ./requirements.txt -r ./singbox_subscribe/requirements.txt
+
+      - run: pyinstaller --noconfirm --onefile --console -i "NONE" "./subconverter.py"
+
+      - uses: actions/upload-artifact@v3
+        env:
+          FILE_NAME: subconverter-${{ matrix.GOOS }}-${{ matrix.GOARCH }}.exe
+        with:
+          name: ${{ env.FILE_NAME }}
+          path: ./dist/subconverter.exe
