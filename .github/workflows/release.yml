@@ -5,7 +5,7 @@ on:
 
 jobs:
   CreateRelease:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
@@ -23,6 +23,7 @@ jobs:
   Build:
     runs-on: windows-latest
     needs: CreateRelease
+    permissions: write-all
     strategy:
       matrix:
         GOOS: [windows]
