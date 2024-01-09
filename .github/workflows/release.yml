@@ -20,9 +20,9 @@ jobs:
           body: |
             Auto-generated release from GitHub Actions.
 
-jobs:
   Build:
     runs-on: windows-latest
+    needs: CreateRelease
     strategy:
       matrix:
         GOOS: [windows]
