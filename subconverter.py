@@ -67,10 +67,10 @@ def get_nodes(path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', type=str, help='subscribe url', default=None)
-    parser.add_argument('--ua', type=str, help='UA', default=None)
+    parser.add_argument('--ua', type=str, help='User Agent', default=None)
     parser.add_argument('--path', type=str,
-                        help='subscribe path', default=None)
-    parser.add_argument('--out', type=str, help='output file', default=None)
+                        help='subscribe file path', default=None)
+    parser.add_argument('--out', type=str, help='output file path', default=None)
 
     args = parser.parse_args()
     if not args.out:
