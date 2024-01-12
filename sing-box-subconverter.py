@@ -46,7 +46,7 @@ def main(args):
             {
                 'enabled': True,
                 'url': args.url or args.path,
-                'UA': args.ua or 'clashmeta'
+                'User-Agent': args.ua or 'clashmeta'
             }
         ]
     }
