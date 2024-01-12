@@ -36,19 +36,10 @@ def get_parsers():
     return parsers_mod
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--url', type=str, help='subscribe url', default=None)
-    parser.add_argument('--ua', type=str, help='User Agent', default=None)
-    parser.add_argument('--path', type=str,
-                        help='subscribe file path', default=None)
-    parser.add_argument('--out', type=str,
-                        help='output file path', default=None)
+VERSION = '1.0.2'
 
-    args = parser.parse_args()
-    if not args.out:
-        raise Exception('output file not specified')
 
+def main(args):
     M.parsers_mod = get_parsers()
     M.providers = {
         'subscribes': [
@@ -73,3 +64,20 @@ if __name__ == '__main__':
     with open(args.out, 'w', encoding='utf-8') as f:
         f.write(json.dumps(nodes, indent=2,
                 ensure_ascii=False))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--url', type=str, help='subscribe url', default=None)
+    parser.add_argument('--ua', type=str, help='User Agent', default=None)
+    parser.add_argument('--path', type=str,
+                        help='subscribe file path', default=None)
+    parser.add_argument('--out', type=str,
+                        help='output file path', default=None)
+    parser.add_argument('--version', action='version', version=VERSION)
+
+    args = parser.parse_args()
+    if not args.out:
+        raise Exception('output file not specified')
+    else:
+        main(args=args)
