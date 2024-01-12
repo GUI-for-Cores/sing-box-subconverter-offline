@@ -24,7 +24,7 @@ index 61e702d..0a32a58 100644
          # print('Lỗi khi tải link đăng ký, bỏ qua link đăng ký này')
          print('----------------------------')
          pass
-+    print(response.headers)
++    print(json.dumps(dict(response.headers)))
      response_content = response.content
      response_text = response_content.decode('utf-8-sig')  # utf-8-sig 可以忽略 BOM
      #response_encoding = response.encoding
