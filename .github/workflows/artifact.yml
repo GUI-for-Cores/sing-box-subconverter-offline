@@ -23,6 +23,11 @@ jobs:
         with:
           submodules: true
 
+      - name: Patch
+        run: |
+          cd singbox_subscribe
+          git apply ../print-header.patch
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:

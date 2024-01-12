@@ -1,0 +1,30 @@
+diff --git a/main.py b/main.py
+index 61e702d..0a32a58 100644
+--- a/main.py
++++ b/main.py
+@@ -118,7 +118,7 @@ def get_nodes(url):
+     if url.startswith('sub://'):
+         url = tool.b64Decode(url[6:]).decode('utf-8')
+     urlstr = urlparse(url)
+-    if not urlstr.scheme:
++    if not urlstr.scheme or os.path.exists(url):
+         try:
+             content = tool.b64Decode(url).decode('utf-8')
+             data = parse_content(content)
+@@ -197,7 +197,7 @@ def get_parser(node):
+     return parsers_mod[proto].parse
+ 
+ 
+-def get_content_from_url(url, n=6):
++def get_content_from_url(url, n=1):
+     UA = ''
+     print('处理: \033[31m' + url + '\033[0m')
+     # print('Đang tải link đăng ký: \033[31m' + url + '\033[0m')
+@@ -224,6 +224,7 @@ def get_content_from_url(url, n=6):
+         # print('Lỗi khi tải link đăng ký, bỏ qua link đăng ký này')
+         print('----------------------------')
+         pass
++    print(response.headers)
+     response_content = response.content
+     response_text = response_content.decode('utf-8-sig')  # utf-8-sig 可以忽略 BOM
+     #response_encoding = response.encoding
