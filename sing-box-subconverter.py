@@ -36,7 +36,7 @@ def get_parsers():
     return parsers_mod
 
 
-VERSION = '1.1.7'
+VERSION = '1.1.8'
 
 
 def main(args):
