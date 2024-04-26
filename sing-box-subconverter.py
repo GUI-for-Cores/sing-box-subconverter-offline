@@ -61,9 +61,14 @@ def main(args):
 
     if not nodes:
         raise Exception('nodes not found')
-    with open(args.out, 'w', encoding='utf-8') as f:
-        f.write(json.dumps(nodes, indent=2,
-                ensure_ascii=False))
+
+    content = json.dumps(nodes, indent=2, ensure_ascii=False)
+
+    if args.out:
+        with open(args.out, 'w', encoding='utf-8') as f:
+            f.write(content)
+    else:
+        print(content)
 
 
 if __name__ == '__main__':
@@ -77,7 +82,9 @@ if __name__ == '__main__':
     parser.add_argument('--version', action='version', version=VERSION)
 
     args = parser.parse_args()
-    if not args.out:
-        raise Exception('output file not specified')
-    else:
-        main(args=args)
+    # if not args.out:
+    #     raise Exception('output file not specified')
+    # else:
+    #     main(args=args)
+
+    main(args=args)
